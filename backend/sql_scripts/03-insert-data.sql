@@ -1,5 +1,3 @@
-USE todoexpress;
-
-INSERT INTO todos (description) VALUES ("Gassigehen");
-INSERT INTO todos (description) VALUES ("füße waschen");
-INSERT INTO todos (description) VALUES ("aufpassen");
+INSERT INTO test (description) VALUES ('Test 1');
+INSERT INTO test (description) VALUES ('Test 2');
+INSERT INTO test (description) VALUES ('Test 3');
