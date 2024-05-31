@@ -1,0 +1,42 @@
+services:
+  database:
+    image: mysql:latest
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+    restart: unless-stopped
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./db-setup/db-setup.sql:/docker-entrypoint-initdb.d/db-setup.sql:ro
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 10
+
+  backend:
+    build: ./backend
+    container_name: backend
+    environment:
+      DB_HOST: database
+      DB_USER: todouser
+      DB_PASSWORD: todo2023!
+      DB_NAME: todoexpress
+      ENABLE_DEBUG: TRUE
+      DB_PORT: 3306
+    ports:
+      - "8000:8000"
+    depends_on:
+      database:
+        condition: service_healthy
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  mysql-data:
